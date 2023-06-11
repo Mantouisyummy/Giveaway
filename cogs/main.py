@@ -7,7 +7,7 @@ import asyncio
 import datetime
 import json
 import os
-        
+
 
 class Cog(commands.Cog):
     def __init__(self, bot:commands.Bot):
@@ -18,7 +18,7 @@ class Cog(commands.Cog):
     @commands.Cog.listener()
     async def on_ready(self):
         print("Giveaway Ready!")
-    
+
     @commands.Cog.listener()
     async def on_message_interaction(self, interaction:MessageInteraction):
         if interaction.data.custom_id == f"giveaway_join_{interaction.channel.id}":
@@ -29,7 +29,7 @@ class Cog(commands.Cog):
                 data['join_list'].append(interaction.user.id)
                 with open(f"./database/{interaction.message.id}.json", "w", encoding="utf-8") as f:
                     json.dump(data, f)
-            
+
                 await self.giveaway.edit(interaction=interaction, message_id=interaction.message.id)
             else:
                 await interaction.response.send_message("你已經參加了!",ephemeral=True)
@@ -66,7 +66,7 @@ class Cog(commands.Cog):
         Option(name="hour",description="小時",type=OptionType.integer,required=False),
         Option(name="min",description="分鐘",type=OptionType.integer,required=False),
         Option(name="sec",description="秒數",type=OptionType.integer,required=False)])
-    
+
     async def start(self, interaction: ApplicationCommandInteraction, prize:str, text:str, winners:int, day:int = 0, hour:int = 0, min:int = 0, sec:int = 0):
         total_seconds = day * 86400 + hour * 3600 + min * 60 + sec
         delta = datetime.timedelta(seconds=total_seconds)
@@ -92,7 +92,7 @@ class Cog(commands.Cog):
         else:
             await interaction.response.send_message("發送成功!",ephemeral=True,delete_after=3)
             await self.giveaway.reroll(bot=self.bot, message_id=message_id)
-        
+
 
 def setup(bot):
     bot.add_cog(Cog(bot))
