@@ -39,13 +39,13 @@ class Cog(commands.Cog):
                 data = json.load(f)
                 if data['join_list'] == []:  # 如果list為空時
                     embed = disnake.Embed(title="❌ | 沒有任何人參加", colour=Colour.red())
-                    await interaction.response.send_message(embed=embed, ephemeral=True)
+                    await interaction.edit_original_response(embed=embed, ephemeral=True)
                 else:
                     users = []
                     for user_id in data['join_list']:
                         user = self.bot.get_user(user_id)
                         if user is not None:
-                            users.append(user.name)
+                            users.append(user.mention)
                     embed = disnake.Embed(
                         title="參加名單",
                         description=", ".join(users),
@@ -67,7 +67,7 @@ class Cog(commands.Cog):
         Option(name="min",description="分鐘",type=OptionType.integer,required=False),
         Option(name="sec",description="秒數",type=OptionType.integer,required=False)])
 
-    async def start(self, interaction: ApplicationCommandInteraction, prize:str, text:str, winners:int, day:int = 0, hour:int = 0, min:int = 0, sec:int = 0):
+    async def start(self, interaction: ApplicationCommandInteraction, prize:str, text:str, winners:int, day:int = 0, hour:int = 0, min:int = 0, sec:int = 60):
         total_seconds = day * 86400 + hour * 3600 + min * 60 + sec
         delta = datetime.timedelta(seconds=total_seconds)
         start_time = datetime.datetime.now() + delta

@@ -15,7 +15,7 @@ class Giveaway:
             temp = {"text":text, "item":item, "winners":winners, "timestamp":timestamp, "join_list":[], "channel_id":channel_id}
             json.dump(temp, f)
 
-        await asyncio.sleep(total)
+        await asyncio.sleep(total - 2)
 
         await self.end(bot=bot, message_id=message_id, winners=winners)
 
@@ -73,7 +73,7 @@ class Giveaway:
                 user = bot.get_user(user_id)
                 winner_list.append(user.mention)
             winner_string = " 和 ".join(winner_list)
-            embed = Embed(title="🎊 抽獎已結束! 🎊",description=f"{winner_string} 中了 {data['item']}！\n• 重新選擇中獎者請使用/giveaway reroll",colour=Colour.green())
+            embed = Embed(title="🎊 抽獎已結束! 🎊",description=f"{winner_string} 中了 {data['item']}！",colour=Colour.green())
             embed.set_footer(text="• 重新選擇中獎者請使用/giveaway reroll")
             msg_embed = Embed(title="🎊 抽獎已結束! 🎊",description=f"中獎者: {winner_string}",colour=Colour.random())
             await channel.send(content=f"恭喜 {winner_string} :tada:",embed=embed)
